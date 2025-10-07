@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Workout Progress Tracker</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com/"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body {
@@ -161,8 +161,23 @@
         import { getFirestore, doc, setDoc, onSnapshot, collection, query, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // --- Firebase Config and Initialization ---
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+        // =================================================================================
+        // IMPORTANT: PASTE YOUR FIREBASE CONFIG OBJECT HERE
+        // You can get this from your Firebase project settings.
+        // Go to: Project Settings > General > Your apps > SDK setup and configuration
+        // =================================================================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyCsy72AmMXDZGj9zmnAKbU6tZs7jtTDc4M",
+            authDomain: "workouttracker-a19ff.firebaseapp.com",
+            projectId: "workouttracker-a19ff",
+            storageBucket: "workouttracker-a19ff.firebasestorage.app",
+            messagingSenderId: "553941339065",
+            appId: "1:553941339065:web:f032c4551ad9bddba44468",
+            measurementId: "G-7M1VCJ83FP"
+        };
+        // =================================================================================
+        // END OF CONFIG
+        // =================================================================================
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
@@ -237,12 +252,13 @@
         // --- Firestore ---
         function getProgressDocRef(dateStr) {
             if (!currentUserId || !dateStr) return null;
-            return doc(db, `artifacts/${appId}/users/${currentUserId}/progress`, dateStr);
+            // The path is now simpler and doesn't rely on a missing appId
+            return doc(db, `users/${currentUserId}/progress`, dateStr);
         }
 
         async function saveProgress(dateStr, data) {
             const docRef = getProgressDocRef(dateStr);
-            if(docRef) await setDoc(docRef, data);
+            if(docRef) await setDoc(docRef, data, { merge: true }); // Use merge to avoid overwriting data unintentionally
         }
 
         async function clearProgress(dateStr) {
@@ -253,7 +269,7 @@
         function fetchAndListenForProgress() {
             if (unsubscribe) unsubscribe();
             if (!currentUserId) return;
-            const q = query(collection(db, `artifacts/${appId}/users/${currentUserId}/progress`));
+            const q = query(collection(db, `users/${currentUserId}/progress`));
             unsubscribe = onSnapshot(q, (snapshot) => {
                 progressData = {};
                 snapshot.forEach((doc) => {
@@ -292,8 +308,8 @@
                 dayEl.textContent = day;
                 dayEl.dataset.date = dateStr;
                 
-                if (status === 'Completed' && data.notes) {
-                     dayEl.innerHTML += `<div class="absolute bottom-1 right-1.5 w-2 h-2 bg-blue-400 rounded-full" title="Has notes"></div>`;
+                if (status === 'Completed' && (data.notes || data.bodyweight)) {
+                     dayEl.innerHTML += `<div class="absolute bottom-1 right-1.5 w-2 h-2 bg-blue-400 rounded-full" title="Has logs"></div>`;
                 }
                 calendarBody.appendChild(dayEl);
             }
@@ -367,4 +383,3 @@
     </script>
 </body>
 </html>
-
