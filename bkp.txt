@@ -98,60 +98,9 @@
 
     <!-- Modals -->
     <div id="modal-backdrop" class="fixed inset-0 bg-black bg-opacity-70 hidden z-30"></div>
-
-    <!-- Status Choice Modal -->
-    <div id="status-modal" class="fixed inset-0 flex items-center justify-center p-4 hidden z-40">
-        <div class="bg-gray-800 rounded-2xl shadow-lg p-6 w-full max-w-sm">
-            <h3 class="text-xl font-bold text-center mb-6" id="modal-date-status">Update Status</h3>
-            <div class="space-y-3">
-                <button data-action="log-workout" class="w-full text-white bg-green-600 hover:bg-green-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Completed Workout</button>
-                <button data-action="rest" class="w-full text-white bg-yellow-500 hover:bg-yellow-600 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Rest Day</button>
-                <button data-action="missed" class="w-full text-white bg-red-600 hover:bg-red-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Missed Workout</button>
-                <button data-action="clear" class="w-full text-gray-300 bg-gray-700 hover:bg-gray-600 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Clear Status</button>
-            </div>
-            <button data-action="close" class="mt-6 w-full text-gray-400 hover:text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center">Cancel</button>
-        </div>
-    </div>
-
-    <!-- Log Workout Modal -->
-    <div id="log-modal" class="fixed inset-0 flex items-center justify-center p-4 hidden z-40">
-        <div class="bg-gray-800 rounded-2xl shadow-lg p-6 w-full max-w-sm">
-            <h3 class="text-xl font-bold text-center mb-6" id="modal-date-log">Log Workout</h3>
-            <div class="space-y-4">
-                <div>
-                    <label for="bodyweight" class="block mb-2 text-sm font-medium text-gray-300">Bodyweight (kg)</label>
-                    <input type="number" step="0.1" id="bodyweight" class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="e.g., 59.5">
-                </div>
-                <div>
-                    <label for="workout-notes" class="block mb-2 text-sm font-medium text-gray-300">Workout Notes</label>
-                    <textarea id="workout-notes" rows="4" class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="e.g., Bench Press: 3x10 @ 50kg..."></textarea>
-                </div>
-            </div>
-            <div class="mt-6 flex gap-4">
-                <button data-action="close" class="w-full text-gray-400 bg-gray-700 hover:bg-gray-600 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Cancel</button>
-                <button data-action="save-log" class="w-full text-white bg-blue-600 hover:bg-blue-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Save</button>
-            </div>
-        </div>
-    </div>
-    
-    <!-- View Progress Modal -->
-    <div id="view-modal" class="fixed inset-0 flex items-center justify-center p-4 hidden z-40">
-        <div class="bg-gray-800 rounded-2xl shadow-lg p-6 w-full max-w-sm">
-            <h3 class="text-xl font-bold text-center mb-4" id="modal-date-view">Workout Log</h3>
-            <div class="bg-gray-700 p-4 rounded-lg space-y-3 text-sm">
-                <p><strong class="text-gray-400">Status:</strong> <span class="text-green-400">Completed</span></p>
-                <p><strong class="text-gray-400">Bodyweight:</strong> <span id="view-bodyweight"></span></p>
-                <div>
-                    <strong class="text-gray-400">Notes:</strong>
-                    <p id="view-notes" class="mt-1 whitespace-pre-wrap text-gray-300"></p>
-                </div>
-            </div>
-             <div class="mt-6 flex gap-4">
-                <button data-action="close" class="w-full text-gray-400 bg-gray-700 hover:bg-gray-600 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Close</button>
-                <button data-action="edit-log" class="w-full text-white bg-blue-600 hover:bg-blue-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Edit</button>
-            </div>
-        </div>
-    </div>
+    <div id="status-modal" class="fixed inset-0 flex items-center justify-center p-4 hidden z-40"><div class="bg-gray-800 rounded-2xl shadow-lg p-6 w-full max-w-sm"><h3 class="text-xl font-bold text-center mb-6" id="modal-date-status">Update Status</h3><div class="space-y-3"><button data-action="log-workout" class="w-full text-white bg-green-600 hover:bg-green-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Completed Workout</button><button data-action="rest" class="w-full text-white bg-yellow-500 hover:bg-yellow-600 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Rest Day</button><button data-action="missed" class="w-full text-white bg-red-600 hover:bg-red-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Missed Workout</button><button data-action="clear" class="w-full text-gray-300 bg-gray-700 hover:bg-gray-600 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Clear Status</button></div><button data-action="close" class="mt-6 w-full text-gray-400 hover:text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center">Cancel</button></div></div>
+    <div id="log-modal" class="fixed inset-0 flex items-center justify-center p-4 hidden z-40"><div class="bg-gray-800 rounded-2xl shadow-lg p-6 w-full max-w-sm"><h3 class="text-xl font-bold text-center mb-6" id="modal-date-log">Log Workout</h3><div class="space-y-4"><div><label for="bodyweight" class="block mb-2 text-sm font-medium text-gray-300">Bodyweight (kg)</label><input type="number" step="0.1" id="bodyweight" class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="e.g., 59.5"></div><div><label for="workout-notes" class="block mb-2 text-sm font-medium text-gray-300">Workout Notes</label><textarea id="workout-notes" rows="4" class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="e.g., Bench Press: 3x10 @ 50kg..."></textarea></div></div><div class="mt-6 flex gap-4"><button data-action="close" class="w-full text-gray-400 bg-gray-700 hover:bg-gray-600 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Cancel</button><button data-action="save-log" class="w-full text-white bg-blue-600 hover:bg-blue-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Save</button></div></div></div>
+    <div id="view-modal" class="fixed inset-0 flex items-center justify-center p-4 hidden z-40"><div class="bg-gray-800 rounded-2xl shadow-lg p-6 w-full max-w-sm"><h3 class="text-xl font-bold text-center mb-4" id="modal-date-view">Workout Log</h3><div class="bg-gray-700 p-4 rounded-lg space-y-3 text-sm"><p><strong class="text-gray-400">Status:</strong> <span id="view-status"></span></p><p><strong class="text-gray-400">Bodyweight:</strong> <span id="view-bodyweight"></span></p><div><strong class="text-gray-400">Notes:</strong><p id="view-notes" class="mt-1 whitespace-pre-wrap text-gray-300"></p></div></div><div class="mt-6 flex gap-4"><button data-action="close" class="w-full text-gray-400 bg-gray-700 hover:bg-gray-600 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Close</button><button data-action="edit-log" class="w-full text-white bg-blue-600 hover:bg-blue-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Edit</button></div></div></div>
 
 
     <script type="module">
@@ -161,26 +110,35 @@
         import { getFirestore, doc, setDoc, onSnapshot, collection, query, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // --- Firebase Config and Initialization ---
-        // =================================================================================
-        // IMPORTANT: PASTE YOUR FIREBASE CONFIG OBJECT HERE
-        // You can get this from your Firebase project settings.
-        // Go to: Project Settings > General > Your apps > SDK setup and configuration
-        // =================================================================================
+        // Configuration provided by user
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
         const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_PROJECT_ID.appspot.com",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-            appId: "YOUR_APP_ID"
+          apiKey: "AIzaSyCsy72AmMXDZGj9zmnAKbU6tZs7jtTDc4M",
+          authDomain: "workouttracker-a19ff.firebaseapp.com",
+          databaseURL: "https://workouttracker-a19ff-default-rtdb.firebaseio.com",
+          projectId: "workouttracker-a19ff",
+          storageBucket: "workouttracker-a19ff.firebasestorage.app",
+          messagingSenderId: "553941339065",
+          appId: "1:553941339065:web:f032c4551ad9bddba44468",
+          measurementId: "G-7M1VCJ83FP"
         };
-        // =================================================================================
-        // END OF CONFIG
-        // =================================================================================
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const auth = getAuth(app);
+        let app;
+        let db;
+        let auth;
+
+        try {
+            app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            auth = getAuth(app);
+        } catch (error) {
+            console.error("Firebase Initialization Error:", error);
+            alert("Could not initialize Firebase. Please check your configuration and network connection. The application will not work correctly.");
+            // Hide spinner and show a permanent error message if Firebase fails to load
+            document.getElementById('loading-spinner').classList.add('hidden');
+            document.body.innerHTML = `<div class="text-center text-red-500"><h1>Initialization Failed</h1><p>Could not connect to Firebase. Please check the console for errors.</p></div>`;
+        }
+        
 
         // --- DOM Elements ---
         const loadingSpinner = document.getElementById('loading-spinner');
@@ -224,26 +182,78 @@
         }
         
         // --- Authentication ---
-        onAuthStateChanged(auth, (user) => {
-            loadingSpinner.classList.add('hidden');
-            if (user) {
-                currentUserId = user.uid;
-                userEmailEl.textContent = user.email;
-                authContainer.classList.add('hidden');
-                appContainer.classList.remove('hidden');
-                renderCalendar();
-            } else {
-                currentUserId = null;
-                if (unsubscribe) unsubscribe();
-                progressData = {};
-                appContainer.classList.add('hidden');
-                authContainer.classList.remove('hidden');
+        if (auth) {
+            onAuthStateChanged(auth, (user) => {
+                loadingSpinner.classList.add('hidden');
+                if (user) {
+                    currentUserId = user.uid;
+                    userEmailEl.textContent = user.email;
+                    authContainer.classList.add('hidden');
+                    appContainer.classList.remove('hidden');
+                    renderCalendar();
+                } else {
+                    currentUserId = null;
+                    if (unsubscribe) unsubscribe();
+                    progressData = {};
+                    appContainer.classList.add('hidden');
+                    authContainer.classList.remove('hidden');
+                }
+            });
+        }
+
+        // --- Auth Form Event Listeners ---
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            loginErrorEl.textContent = '';
+            try {
+                await signInWithEmailAndPassword(auth, loginForm['login-email'].value, loginForm['login-password'].value);
+            } catch (error) {
+                console.error("Login Error:", error.code, error.message);
+                switch (error.code) {
+                    case 'auth/user-not-found':
+                    case 'auth/wrong-password':
+                    case 'auth/invalid-credential':
+                        loginErrorEl.textContent = "Invalid email or password.";
+                        break;
+                    case 'auth/invalid-email':
+                        loginErrorEl.textContent = "Please enter a valid email format.";
+                        break;
+                    default:
+                        loginErrorEl.textContent = "An unexpected error occurred. Please try again.";
+                        break;
+                }
             }
         });
 
-        // --- Auth Form Event Listeners ---
-        loginForm.addEventListener('submit', async (e) => { e.preventDefault(); loginErrorEl.textContent = ''; try { await signInWithEmailAndPassword(auth, loginForm['login-email'].value, loginForm['login-password'].value); } catch (error) { loginErrorEl.textContent = "Invalid email or password."; } });
-        registerForm.addEventListener('submit', async (e) => { e.preventDefault(); registerErrorEl.textContent = ''; const pass = registerForm['register-password'].value; if (pass.length < 6) { registerErrorEl.textContent = "Password must be at least 6 characters."; return; } try { await createUserWithEmailAndPassword(auth, registerForm['register-email'].value, pass); } catch (error) { registerErrorEl.textContent = "Email may already be in use."; } });
+        registerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            registerErrorEl.textContent = '';
+            const pass = registerForm['register-password'].value;
+            if (pass.length < 6) {
+                registerErrorEl.textContent = "Password must be at least 6 characters.";
+                return;
+            }
+            try {
+                await createUserWithEmailAndPassword(auth, registerForm['register-email'].value, pass);
+            } catch (error) {
+                console.error("Registration Error:", error.code, error.message);
+                switch (error.code) {
+                    case 'auth/email-already-in-use':
+                        registerErrorEl.textContent = "This email is already registered.";
+                        break;
+                    case 'auth/invalid-email':
+                        registerErrorEl.textContent = "Please enter a valid email format.";
+                        break;
+                    case 'auth/weak-password':
+                        registerErrorEl.textContent = "Password is too weak. Must be at least 6 characters.";
+                        break;
+                    default:
+                        registerErrorEl.textContent = "Registration failed. Please check config and network.";
+                        break;
+                }
+            }
+        });
+
         signoutBtn.addEventListener('click', () => signOut(auth));
         showRegisterBtn.addEventListener('click', (e) => { e.preventDefault(); loginForm.classList.add('hidden'); registerForm.classList.remove('hidden'); });
         showLoginBtn.addEventListener('click', (e) => { e.preventDefault(); registerForm.classList.add('hidden'); loginForm.classList.remove('hidden'); });
@@ -251,13 +261,13 @@
         // --- Firestore ---
         function getProgressDocRef(dateStr) {
             if (!currentUserId || !dateStr) return null;
-            // The path is now simpler and doesn't rely on a missing appId
+            // Switched to a simpler path for Firestore that doesn't rely on a specific App ID.
             return doc(db, `users/${currentUserId}/progress`, dateStr);
         }
 
         async function saveProgress(dateStr, data) {
             const docRef = getProgressDocRef(dateStr);
-            if(docRef) await setDoc(docRef, data, { merge: true }); // Use merge to avoid overwriting data unintentionally
+            if(docRef) await setDoc(docRef, data, { merge: true });
         }
 
         async function clearProgress(dateStr) {
@@ -325,14 +335,17 @@
             if (!cell) return;
             selectedDate = cell.dataset.date;
             const data = progressData[selectedDate];
+            const dateForTitle = new Date(selectedDate+'T00:00:00').toLocaleDateString();
 
             if (data?.status === 'Completed') {
-                document.getElementById('modal-date-view').textContent = `Log for ${new Date(selectedDate+'T00:00:00').toLocaleDateString()}`;
-                document.getElementById('view-bodyweight').textContent = data.bodyweight ? `${data.bodyweight} kg` : 'N/A';
-                document.getElementById('view-notes').textContent = data.notes || 'No notes added.';
-                showModal(viewModal);
+                 document.getElementById('modal-date-view').textContent = `Log for ${dateForTitle}`;
+                 document.getElementById('view-status').textContent = 'Completed';
+                 document.getElementById('view-status').className = 'text-green-400';
+                 document.getElementById('view-bodyweight').textContent = data.bodyweight ? `${data.bodyweight} kg` : 'N/A';
+                 document.getElementById('view-notes').textContent = data.notes || 'No notes added.';
+                 showModal(viewModal);
             } else {
-                document.getElementById('modal-date-status').textContent = `Update ${new Date(selectedDate+'T00:00:00').toLocaleDateString()}`;
+                document.getElementById('modal-date-status').textContent = `Update ${dateForTitle}`;
                 showModal(statusModal);
             }
         });
@@ -382,4 +395,3 @@
     </script>
 </body>
 </html>
-
