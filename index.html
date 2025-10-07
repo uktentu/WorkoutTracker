@@ -1,107 +1,118 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Workout Progress Tracker</title>
-    <script src="https://cdn.tailwindcss.com/"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', sans-serif;
+            background-color: #0f172a; /* slate-900 */
         }
+        /* Custom scrollbar for a more integrated look */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #1e293b; } /* slate-800 */
+        ::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; } /* slate-600 */
+        ::-webkit-scrollbar-thumb:hover { background: #64748b; } /* slate-500 */
+
         .calendar-grid {
+            display: grid;
             grid-template-columns: repeat(7, minmax(0, 1fr));
+        }
+        /* Fade-in animation for modals */
+        .modal.hidden {
+            display: none;
+        }
+        .modal {
+            animation: fadeIn 0.2s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
         }
     </style>
 </head>
-<body class="bg-gray-900 text-white flex items-center justify-center min-h-screen p-4">
+<body class="text-slate-200 flex items-center justify-center min-h-screen p-2 sm:p-4">
 
-    <div id="loading-spinner" class="fixed inset-0 bg-gray-900 bg-opacity-80 flex items-center justify-center z-50">
-        <div class="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
+    <div id="loading-spinner" class="fixed inset-0 bg-slate-900 bg-opacity-80 flex items-center justify-center z-50">
+        <div class="animate-spin rounded-full h-24 w-24 border-t-2 border-b-2 border-indigo-500"></div>
     </div>
 
     <!-- Auth Container -->
-    <div id="auth-container" class="w-full max-w-md hidden">
-        <div class="bg-gray-800 rounded-2xl shadow-lg p-8">
-            <!-- Login Form -->
+    <div id="auth-container" class="w-full max-w-sm hidden">
+        <div class="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-2xl shadow-lg p-6 sm:p-8">
             <form id="login-form">
-                <h2 class="text-3xl font-bold text-center mb-2">Welcome Back!</h2>
-                <p class="text-center text-gray-400 mb-6">Sign in to track your progress.</p>
+                <h2 class="text-3xl font-bold text-center mb-2 text-white">Welcome Back!</h2>
+                <p class="text-center text-slate-400 mb-6">Sign in to continue your journey.</p>
                 <div class="mb-4">
-                    <label for="login-email" class="block mb-2 text-sm font-medium text-gray-300">Email</label>
-                    <input type="email" id="login-email" class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="name@company.com" required>
+                    <label for="login-email" class="block mb-2 text-sm font-medium text-slate-300">Email</label>
+                    <input type="email" id="login-email" class="bg-slate-700 border border-slate-600 text-white placeholder-slate-400 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5 transition" placeholder="you@email.com" required>
                 </div>
                 <div class="mb-6">
-                    <label for="login-password" class="block mb-2 text-sm font-medium text-gray-300">Password</label>
-                    <input type="password" id="login-password" class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="•••••••••" required>
+                    <label for="login-password" class="block mb-2 text-sm font-medium text-slate-300">Password</label>
+                    <input type="password" id="login-password" class="bg-slate-700 border border-slate-600 text-white placeholder-slate-400 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5 transition" placeholder="•••••••••" required>
                 </div>
-                <button type="submit" class="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Login</button>
-                 <p id="login-error" class="text-red-500 text-sm mt-4 text-center"></p>
-                <p class="text-sm font-light text-gray-400 text-center mt-4">
-                    Don’t have an account yet? <a href="#" id="show-register" class="font-medium text-blue-500 hover:underline">Sign up</a>
+                <button type="submit" class="w-full text-white bg-indigo-600 hover:bg-indigo-700 focus:ring-4 focus:outline-none focus:ring-indigo-500/50 font-medium rounded-lg text-sm px-5 py-3 text-center transition-transform active:scale-[0.98]">Login</button>
+                <p id="login-error" class="text-red-400 text-sm mt-4 text-center h-5"></p>
+                <p class="text-sm text-slate-400 text-center mt-4">
+                    Don’t have an account? <a href="#" id="show-register" class="font-medium text-indigo-400 hover:underline">Sign up</a>
                 </p>
             </form>
-            
-            <!-- Register Form -->
             <form id="register-form" class="hidden">
-                 <h2 class="text-3xl font-bold text-center mb-2">Create Account</h2>
-                <p class="text-center text-gray-400 mb-6">Start your fitness journey today.</p>
+                <h2 class="text-3xl font-bold text-center mb-2 text-white">Create Account</h2>
+                <p class="text-center text-slate-400 mb-6">Start tracking your fitness today.</p>
                 <div class="mb-4">
-                    <label for="register-email" class="block mb-2 text-sm font-medium text-gray-300">Email</label>
-                    <input type="email" id="register-email" class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="name@company.com" required>
+                    <label for="register-email" class="block mb-2 text-sm font-medium text-slate-300">Email</label>
+                    <input type="email" id="register-email" class="bg-slate-700 border border-slate-600 text-white placeholder-slate-400 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5 transition" placeholder="you@email.com" required>
                 </div>
                 <div class="mb-6">
-                    <label for="register-password" class="block mb-2 text-sm font-medium text-gray-300">Password</label>
-                    <input type="password" id="register-password" class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="•••••••••" required>
+                    <label for="register-password" class="block mb-2 text-sm font-medium text-slate-300">Password</label>
+                    <input type="password" id="register-password" class="bg-slate-700 border border-slate-600 text-white placeholder-slate-400 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5 transition" placeholder="•••••••••" required>
                 </div>
-                <button type="submit" class="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Create Account</button>
-                 <p id="register-error" class="text-red-500 text-sm mt-4 text-center"></p>
-                <p class="text-sm font-light text-gray-400 text-center mt-4">
-                    Already have an account? <a href="#" id="show-login" class="font-medium text-blue-500 hover:underline">Login</a>
+                <button type="submit" class="w-full text-white bg-indigo-600 hover:bg-indigo-700 focus:ring-4 focus:outline-none focus:ring-indigo-500/50 font-medium rounded-lg text-sm px-5 py-3 text-center transition-transform active:scale-[0.98]">Create Account</button>
+                <p id="register-error" class="text-red-400 text-sm mt-4 text-center h-5"></p>
+                <p class="text-sm text-slate-400 text-center mt-4">
+                    Already have an account? <a href="#" id="show-login" class="font-medium text-indigo-400 hover:underline">Login</a>
                 </p>
             </form>
         </div>
     </div>
     
     <div id="app-container" class="w-full max-w-4xl mx-auto hidden">
-        <div class="bg-gray-800 rounded-2xl shadow-lg p-6">
-            <div class="flex items-center justify-between mb-6">
-                <button id="prev-month" class="p-2 rounded-full bg-gray-700 hover:bg-gray-600 transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
-                </button>
-                <h2 id="current-month-year" class="text-2xl font-bold"></h2>
-                <button id="next-month" class="p-2 rounded-full bg-gray-700 hover:bg-gray-600 transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
-                </button>
+        <div class="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-2xl shadow-lg p-4 sm:p-6">
+            <div class="flex items-center justify-between mb-4">
+                <button id="prev-month" aria-label="Previous month" class="p-2 rounded-full text-slate-400 hover:bg-slate-700 hover:text-white transition-colors"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /></svg></button>
+                <h2 id="current-month-year" class="text-xl sm:text-2xl font-bold text-white text-center"></h2>
+                <button id="next-month" aria-label="Next month" class="p-2 rounded-full text-slate-400 hover:bg-slate-700 hover:text-white transition-colors"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg></button>
             </div>
-
-            <div class="grid calendar-grid gap-2 text-center text-sm font-medium text-gray-400 mb-2">
+            
+            <div class="calendar-grid gap-1 sm:gap-2 text-center text-xs sm:text-sm font-semibold text-slate-400 mb-2">
                 <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
             </div>
 
-            <div id="calendar-body" class="grid calendar-grid gap-2"></div>
+            <div id="calendar-body" class="calendar-grid gap-1 sm:gap-2"></div>
 
-            <div class="mt-6 flex justify-center items-center space-x-4 text-sm">
-                <div class="flex items-center"><span class="w-4 h-4 rounded-full bg-green-500 mr-2"></span>Completed</div>
-                <div class="flex items-center"><span class="w-4 h-4 rounded-full bg-yellow-500 mr-2"></span>Rest Day</div>
-                <div class="flex items-center"><span class="w-4 h-4 rounded-full bg-red-500 mr-2"></span>Missed</div>
-                <div class="flex items-center"><span class="w-4 h-4 rounded-full bg-gray-700 mr-2"></span>Unmarked</div>
+            <div class="flex flex-wrap justify-center items-center gap-x-4 gap-y-2 mt-4 text-xs sm:text-sm">
+                <div class="flex items-center"><span class="w-3 h-3 rounded-full bg-emerald-500 mr-2"></span>Completed</div>
+                <div class="flex items-center"><span class="w-3 h-3 rounded-full bg-amber-500 mr-2"></span>Rest Day</div>
+                <div class="flex items-center"><span class="w-3 h-3 rounded-full bg-red-500 mr-2"></span>Missed</div>
+                <button id="go-to-today" class="text-indigo-400 hover:underline text-xs sm:text-sm font-medium">Go to Today</button>
             </div>
 
-             <div class="mt-8 text-center">
-                 <div class="text-gray-500 text-xs mb-2">Logged in as: <span id="user-email" class="font-mono"></span></div>
+             <div class="mt-6 pt-4 border-t border-slate-700 text-center">
+                 <div class="text-slate-500 text-xs mb-2">Logged in as: <span id="user-email" class="font-mono text-slate-400"></span></div>
                  <button id="signout-btn" class="text-sm text-red-400 hover:text-red-300 hover:underline">Sign Out</button>
              </div>
         </div>
     </div>
 
     <!-- Modals -->
-    <div id="modal-backdrop" class="fixed inset-0 bg-black bg-opacity-70 hidden z-30"></div>
-    <div id="status-modal" class="fixed inset-0 flex items-center justify-center p-4 hidden z-40"><div class="bg-gray-800 rounded-2xl shadow-lg p-6 w-full max-w-sm"><h3 class="text-xl font-bold text-center mb-6" id="modal-date-status">Update Status</h3><div class="space-y-3"><button data-action="log-workout" class="w-full text-white bg-green-600 hover:bg-green-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Completed Workout</button><button data-action="rest" class="w-full text-white bg-yellow-500 hover:bg-yellow-600 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Rest Day</button><button data-action="missed" class="w-full text-white bg-red-600 hover:bg-red-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Missed Workout</button><button data-action="clear" class="w-full text-gray-300 bg-gray-700 hover:bg-gray-600 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Clear Status</button></div><button data-action="close" class="mt-6 w-full text-gray-400 hover:text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center">Cancel</button></div></div>
-    <div id="log-modal" class="fixed inset-0 flex items-center justify-center p-4 hidden z-40"><div class="bg-gray-800 rounded-2xl shadow-lg p-6 w-full max-w-sm"><h3 class="text-xl font-bold text-center mb-6" id="modal-date-log">Log Workout</h3><div class="space-y-4"><div><label for="bodyweight" class="block mb-2 text-sm font-medium text-gray-300">Bodyweight (kg)</label><input type="number" step="0.1" id="bodyweight" class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="e.g., 59.5"></div><div><label for="workout-notes" class="block mb-2 text-sm font-medium text-gray-300">Workout Notes</label><textarea id="workout-notes" rows="4" class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="e.g., Bench Press: 3x10 @ 50kg..."></textarea></div></div><div class="mt-6 flex gap-4"><button data-action="close" class="w-full text-gray-400 bg-gray-700 hover:bg-gray-600 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Cancel</button><button data-action="save-log" class="w-full text-white bg-blue-600 hover:bg-blue-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Save</button></div></div></div>
-    <div id="view-modal" class="fixed inset-0 flex items-center justify-center p-4 hidden z-40"><div class="bg-gray-800 rounded-2xl shadow-lg p-6 w-full max-w-sm"><h3 class="text-xl font-bold text-center mb-4" id="modal-date-view">Workout Log</h3><div class="bg-gray-700 p-4 rounded-lg space-y-3 text-sm"><p><strong class="text-gray-400">Status:</strong> <span id="view-status"></span></p><p><strong class="text-gray-400">Bodyweight:</strong> <span id="view-bodyweight"></span></p><div><strong class="text-gray-400">Notes:</strong><p id="view-notes" class="mt-1 whitespace-pre-wrap text-gray-300"></p></div></div><div class="mt-6 flex gap-4"><button data-action="close" class="w-full text-gray-400 bg-gray-700 hover:bg-gray-600 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Close</button><button data-action="edit-log" class="w-full text-white bg-blue-600 hover:bg-blue-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Edit</button></div></div></div>
-
+    <div id="modal-backdrop" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden z-30 transition-opacity"></div>
+    <div id="status-modal" class="modal fixed inset-0 flex items-center justify-center p-4 hidden z-40"><div class="bg-slate-800 border border-slate-700 rounded-2xl shadow-lg p-6 w-full max-w-xs"><h3 class="text-lg font-bold text-center mb-6 text-white" id="modal-date-status">Update Status</h3><div class="space-y-3"><button data-action="log-workout" class="w-full text-white bg-emerald-600 hover:bg-emerald-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-transform active:scale-[0.98]">Completed Workout</button><button data-action="rest" class="w-full text-white bg-amber-500 hover:bg-amber-600 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-transform active:scale-[0.98]">Rest Day</button><button data-action="missed" class="w-full text-white bg-red-600 hover:bg-red-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-transform active:scale-[0.98]">Missed Workout</button><button data-action="clear" class="w-full text-slate-300 bg-slate-600 hover:bg-slate-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-transform active:scale-[0.98]">Clear Status</button></div><button data-action="close" class="mt-6 w-full text-slate-400 hover:text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center">Cancel</button></div></div>
+    <div id="log-modal" class="modal fixed inset-0 flex items-center justify-center p-4 hidden z-40"><div class="bg-slate-800 border border-slate-700 rounded-2xl shadow-lg p-6 w-full max-w-sm"><h3 class="text-lg font-bold text-center mb-6 text-white" id="modal-date-log">Log Workout</h3><div class="space-y-4"><div><label for="bodyweight" class="block mb-2 text-sm font-medium text-slate-300">Bodyweight (kg)</label><input type="number" step="0.1" id="bodyweight" class="bg-slate-700 border border-slate-600 text-white placeholder-slate-400 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5 transition"></div><div><label for="workout-notes" class="block mb-2 text-sm font-medium text-slate-300">Workout Notes</label><textarea id="workout-notes" rows="4" class="bg-slate-700 border border-slate-600 text-white placeholder-slate-400 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5 transition" placeholder="e.g., Bench Press: 3x10 @ 50kg..."></textarea></div></div><div class="mt-6 flex gap-4"><button data-action="close" class="w-full text-slate-400 bg-slate-600 hover:bg-slate-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-transform active:scale-[0.98]">Cancel</button><button data-action="save-log" id="save-log-btn" class="w-full text-white bg-indigo-600 hover:bg-indigo-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-transform active:scale-[0.98] flex items-center justify-center"><span class="btn-text">Save</span><svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white hidden" id="save-spinner" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg></button></div></div></div>
+    <div id="view-modal" class="modal fixed inset-0 flex items-center justify-center p-4 hidden z-40"><div class="bg-slate-800 border border-slate-700 rounded-2xl shadow-lg p-6 w-full max-w-sm"><h3 class="text-lg font-bold text-center mb-4 text-white" id="modal-date-view">Workout Log</h3><div class="bg-slate-900/50 p-4 rounded-lg space-y-3 text-sm"><p class="flex items-center"><strong class="text-slate-400 w-24">Status:</strong><span id="view-status" class="font-semibold"></span></p><p class="flex items-center"><strong class="text-slate-400 w-24">Bodyweight:</strong><span id="view-bodyweight"></span></p><div><strong class="text-slate-400 block mb-1">Notes:</strong><p id="view-notes" class="whitespace-pre-wrap text-slate-300 max-h-40 overflow-y-auto"></p></div></div><div class="mt-6 flex gap-4"><button data-action="close" class="w-full text-slate-400 bg-slate-600 hover:bg-slate-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-transform active:scale-[0.98]">Close</button><button data-action="edit-log" class="w-full text-white bg-indigo-600 hover:bg-indigo-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-transform active:scale-[0.98]">Edit</button></div></div></div>
 
     <script type="module">
         // Firebase Imports
@@ -110,36 +121,27 @@
         import { getFirestore, doc, setDoc, onSnapshot, collection, query, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // --- Firebase Config and Initialization ---
-        // Configuration provided by user
-        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
         const firebaseConfig = {
-          apiKey: "AIzaSyCsy72AmMXDZGj9zmnAKbU6tZs7jtTDc4M",
-          authDomain: "workouttracker-a19ff.firebaseapp.com",
-          databaseURL: "https://workouttracker-a19ff-default-rtdb.firebaseio.com",
-          projectId: "workouttracker-a19ff",
-          storageBucket: "workouttracker-a19ff.firebasestorage.app",
-          messagingSenderId: "553941339065",
-          appId: "1:553941339065:web:f032c4551ad9bddba44468",
-          measurementId: "G-7M1VCJ83FP"
+            apiKey: "AIzaSyCsy72AmMXDZGj9zmnAKbU6tZs7jtTDc4M",
+            authDomain: "workouttracker-a19ff.firebaseapp.com",
+            databaseURL: "https://workouttracker-a19ff-default-rtdb.firebaseio.com",
+            projectId: "workouttracker-a19ff",
+            storageBucket: "workouttracker-a19ff.appspot.com",
+            messagingSenderId: "553941339065",
+            appId: "1:553941339065:web:f032c4551ad9bddba44468",
+            measurementId: "G-7M1VCJ83FP"
         };
-
-        let app;
-        let db;
-        let auth;
-
+        let app, db, auth;
         try {
             app = initializeApp(firebaseConfig);
             db = getFirestore(app);
             auth = getAuth(app);
         } catch (error) {
             console.error("Firebase Initialization Error:", error);
-            alert("Could not initialize Firebase. Please check your configuration and network connection. The application will not work correctly.");
-            // Hide spinner and show a permanent error message if Firebase fails to load
             document.getElementById('loading-spinner').classList.add('hidden');
-            document.body.innerHTML = `<div class="text-center text-red-500"><h1>Initialization Failed</h1><p>Could not connect to Firebase. Please check the console for errors.</p></div>`;
+            document.body.innerHTML = `<div class="text-center text-red-400 p-8"><h1>Initialization Failed</h1><p>Could not connect to Firebase. Check console for errors.</p></div>`;
         }
         
-
         // --- DOM Elements ---
         const loadingSpinner = document.getElementById('loading-spinner');
         const appContainer = document.getElementById('app-container');
@@ -156,6 +158,8 @@
         const currentMonthYearEl = document.getElementById('current-month-year');
         const prevMonthBtn = document.getElementById('prev-month');
         const nextMonthBtn = document.getElementById('next-month');
+        const goToTodayBtn = document.getElementById('go-to-today');
+        const saveLogBtn = document.getElementById('save-log-btn');
 
         const modalBackdrop = document.getElementById('modal-backdrop');
         const statusModal = document.getElementById('status-modal');
@@ -202,58 +206,34 @@
         }
 
         // --- Auth Form Event Listeners ---
-        loginForm.addEventListener('submit', async (e) => {
+        const handleAuthSubmit = async (form, action, errorEl) => {
             e.preventDefault();
-            loginErrorEl.textContent = '';
-            try {
-                await signInWithEmailAndPassword(auth, loginForm['login-email'].value, loginForm['login-password'].value);
-            } catch (error) {
-                console.error("Login Error:", error.code, error.message);
-                switch (error.code) {
-                    case 'auth/user-not-found':
-                    case 'auth/wrong-password':
-                    case 'auth/invalid-credential':
-                        loginErrorEl.textContent = "Invalid email or password.";
-                        break;
-                    case 'auth/invalid-email':
-                        loginErrorEl.textContent = "Please enter a valid email format.";
-                        break;
-                    default:
-                        loginErrorEl.textContent = "An unexpected error occurred. Please try again.";
-                        break;
-                }
-            }
-        });
-
-        registerForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            registerErrorEl.textContent = '';
-            const pass = registerForm['register-password'].value;
-            if (pass.length < 6) {
-                registerErrorEl.textContent = "Password must be at least 6 characters.";
+            errorEl.textContent = '';
+            const email = form.querySelector('input[type="email"]').value;
+            const password = form.querySelector('input[type="password"]').value;
+            if (action === 'register' && password.length < 6) {
+                errorEl.textContent = "Password must be at least 6 characters.";
                 return;
             }
             try {
-                await createUserWithEmailAndPassword(auth, registerForm['register-email'].value, pass);
-            } catch (error) {
-                console.error("Registration Error:", error.code, error.message);
-                switch (error.code) {
-                    case 'auth/email-already-in-use':
-                        registerErrorEl.textContent = "This email is already registered.";
-                        break;
-                    case 'auth/invalid-email':
-                        registerErrorEl.textContent = "Please enter a valid email format.";
-                        break;
-                    case 'auth/weak-password':
-                        registerErrorEl.textContent = "Password is too weak. Must be at least 6 characters.";
-                        break;
-                    default:
-                        registerErrorEl.textContent = "Registration failed. Please check config and network.";
-                        break;
+                if (action === 'register') {
+                    await createUserWithEmailAndPassword(auth, email, password);
+                } else {
+                    await signInWithEmailAndPassword(auth, email, password);
                 }
+            } catch (error) {
+                console.error(`${action} Error:`, error.code);
+                let message = 'An unexpected error occurred.';
+                if (error.code === 'auth/email-already-in-use') message = 'This email is already registered.';
+                else if (['auth/user-not-found', 'auth/wrong-password', 'auth/invalid-credential'].includes(error.code)) message = 'Invalid email or password.';
+                else if (error.code === 'auth/invalid-email') message = 'Please enter a valid email format.';
+                else if (error.code === 'auth/weak-password') message = 'Password is too weak.';
+                errorEl.textContent = message;
             }
-        });
+        };
 
+        loginForm.addEventListener('submit', (e) => handleAuthSubmit(e.target, 'login', loginErrorEl));
+        registerForm.addEventListener('submit', (e) => handleAuthSubmit(e.target, 'register', registerErrorEl));
         signoutBtn.addEventListener('click', () => signOut(auth));
         showRegisterBtn.addEventListener('click', (e) => { e.preventDefault(); loginForm.classList.add('hidden'); registerForm.classList.remove('hidden'); });
         showLoginBtn.addEventListener('click', (e) => { e.preventDefault(); registerForm.classList.add('hidden'); loginForm.classList.remove('hidden'); });
@@ -261,36 +241,35 @@
         // --- Firestore ---
         function getProgressDocRef(dateStr) {
             if (!currentUserId || !dateStr) return null;
-            // Switched to a simpler path for Firestore that doesn't rely on a specific App ID.
             return doc(db, `users/${currentUserId}/progress`, dateStr);
         }
-
         async function saveProgress(dateStr, data) {
             const docRef = getProgressDocRef(dateStr);
             if(docRef) await setDoc(docRef, data, { merge: true });
         }
-
         async function clearProgress(dateStr) {
             const docRef = getProgressDocRef(dateStr);
             if(docRef) await deleteDoc(docRef);
         }
-        
         function fetchAndListenForProgress() {
             if (unsubscribe) unsubscribe();
             if (!currentUserId) return;
             const q = query(collection(db, `users/${currentUserId}/progress`));
             unsubscribe = onSnapshot(q, (snapshot) => {
                 progressData = {};
-                snapshot.forEach((doc) => {
-                    progressData[doc.id] = doc.data();
-                });
+                snapshot.forEach((doc) => { progressData[doc.id] = doc.data(); });
                 renderCalendarUI();
             }, (error) => console.error("Error fetching progress:", error));
         }
 
         // --- Calendar Logic ---
-        function getStatusColorClass(status) {
-            return { 'Completed': 'bg-green-500 hover:bg-green-600', 'Rest Day': 'bg-yellow-500 hover:bg-yellow-600', 'Missed': 'bg-red-500 hover:bg-red-600' }[status] || 'bg-gray-700 hover:bg-gray-600';
+        function getStatusClasses(status) {
+            const colors = { 
+                'Completed': 'bg-emerald-500/80 text-white', 
+                'Rest Day': 'bg-amber-500/80 text-white', 
+                'Missed': 'bg-red-500/80 text-white'
+            };
+            return colors[status] || 'bg-slate-700/50 hover:bg-slate-700 text-slate-300';
         }
         
         function renderCalendarUI() {
@@ -300,47 +279,52 @@
             currentMonthYearEl.textContent = `${currentDate.toLocaleString('default', { month: 'long' })} ${year}`;
             const firstDayOfMonth = new Date(year, month, 1).getDay();
             const daysInMonth = new Date(year, month + 1, 0).getDate();
-
             for (let i = 0; i < firstDayOfMonth; i++) calendarBody.innerHTML += `<div></div>`;
 
             for (let day = 1; day <= daysInMonth; day++) {
                 const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
                 const data = progressData[dateStr];
                 const status = data?.status;
-                const colorClass = getStatusColorClass(status);
+                const colorClass = getStatusClasses(status);
                 const today = new Date();
                 const isToday = today.toDateString() === new Date(year, month, day).toDateString();
-                const todayClass = isToday ? 'ring-2 ring-blue-500' : '';
+                const todayClass = isToday ? 'ring-2 ring-indigo-500' : 'ring-1 ring-transparent';
 
                 const dayEl = document.createElement('div');
-                dayEl.className = `day-cell relative p-2 h-16 rounded-lg flex items-center justify-center cursor-pointer transition-all duration-200 ${colorClass} ${todayClass}`;
+                dayEl.className = `day-cell relative flex items-center justify-center font-semibold rounded-lg aspect-square cursor-pointer transition-all duration-200 ${colorClass} ${todayClass}`;
                 dayEl.textContent = day;
                 dayEl.dataset.date = dateStr;
                 
                 if (status === 'Completed' && (data.notes || data.bodyweight)) {
-                     dayEl.innerHTML += `<div class="absolute bottom-1 right-1.5 w-2 h-2 bg-blue-400 rounded-full" title="Has logs"></div>`;
+                     dayEl.innerHTML += `<div class="absolute bottom-1.5 right-1.5 w-2 h-2 bg-indigo-400 rounded-full" title="Has logs"></div>`;
                 }
                 calendarBody.appendChild(dayEl);
             }
         }
-        
         function renderCalendar() { if (currentUserId) { fetchAndListenForProgress(); renderCalendarUI(); } }
 
         // --- Event Listeners ---
         prevMonthBtn.addEventListener('click', () => { currentDate.setMonth(currentDate.getMonth() - 1); renderCalendar(); });
         nextMonthBtn.addEventListener('click', () => { currentDate.setMonth(currentDate.getMonth() + 1); renderCalendar(); });
+        goToTodayBtn.addEventListener('click', () => { currentDate = new Date(); renderCalendar(); });
 
         calendarBody.addEventListener('click', (e) => {
             const cell = e.target.closest('.day-cell');
             if (!cell) return;
             selectedDate = cell.dataset.date;
             const data = progressData[selectedDate];
-            const dateForTitle = new Date(selectedDate+'T00:00:00').toLocaleDateString();
+            const dateForTitle = new Date(selectedDate+'T00:00:00').toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 
-            if (data?.status === 'Completed') {
-                 document.getElementById('modal-date-view').textContent = `Log for ${dateForTitle}`;
-                 document.getElementById('view-status').textContent = 'Completed';
-                 document.getElementById('view-status').className = 'text-green-400';
+            if (data) {
+                 document.getElementById('modal-date-view').textContent = dateForTitle;
+                 const viewStatusEl = document.getElementById('view-status');
+                 viewStatusEl.textContent = data.status;
+                 const statusInfo = {
+                    'Completed': 'text-emerald-400', 
+                    'Rest Day': 'text-amber-400', 
+                    'Missed': 'text-red-400'
+                 };
+                 viewStatusEl.className = `font-semibold ${statusInfo[data.status] || 'text-slate-400'}`;
                  document.getElementById('view-bodyweight').textContent = data.bodyweight ? `${data.bodyweight} kg` : 'N/A';
                  document.getElementById('view-notes').textContent = data.notes || 'No notes added.';
                  showModal(viewModal);
@@ -350,48 +334,58 @@
             }
         });
 
-        document.addEventListener('click', (e) => {
-            const action = e.target.dataset.action;
+        document.addEventListener('click', async (e) => {
+            const action = e.target.closest('[data-action]')?.dataset.action;
             if (!action) return;
+            
+            const showSavingSpinner = (show) => {
+                saveLogBtn.querySelector('.btn-text').classList.toggle('hidden', show);
+                saveLogBtn.querySelector('#save-spinner').classList.toggle('hidden', !show);
+                saveLogBtn.disabled = show;
+            };
 
             switch(action) {
-                case 'close':
-                    hideAllModals();
-                    break;
-                case 'log-workout':
-                    document.getElementById('modal-date-log').textContent = `Log Workout for ${new Date(selectedDate+'T00:00:00').toLocaleDateString()}`;
+                case 'close': hideAllModals(); break;
+                case 'log-workout': {
+                    const dateForTitle = new Date(selectedDate+'T00:00:00').toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
+                    document.getElementById('modal-date-log').textContent = `Log for ${dateForTitle}`;
                     const existingData = progressData[selectedDate];
                     document.getElementById('bodyweight').value = existingData?.bodyweight || '';
                     document.getElementById('workout-notes').value = existingData?.notes || '';
                     showModal(logModal);
                     break;
-                case 'rest':
-                    saveProgress(selectedDate, { status: 'Rest Day' });
-                    hideAllModals();
-                    break;
-                case 'missed':
-                    saveProgress(selectedDate, { status: 'Missed' });
-                    hideAllModals();
-                    break;
-                case 'clear':
-                    clearProgress(selectedDate);
-                    hideAllModals();
-                    break;
-                case 'save-log':
+                }
+                case 'rest': await saveProgress(selectedDate, { status: 'Rest Day' }); hideAllModals(); break;
+                case 'missed': await saveProgress(selectedDate, { status: 'Missed' }); hideAllModals(); break;
+                case 'clear': await clearProgress(selectedDate); hideAllModals(); break;
+                case 'save-log': {
+                    showSavingSpinner(true);
                     const bodyweight = document.getElementById('bodyweight').value;
                     const notes = document.getElementById('workout-notes').value;
-                    saveProgress(selectedDate, { status: 'Completed', bodyweight: parseFloat(bodyweight) || null, notes: notes });
+                    await saveProgress(selectedDate, { status: 'Completed', bodyweight: parseFloat(bodyweight) || null, notes: notes });
+                    showSavingSpinner(false);
                     hideAllModals();
                     break;
-                 case 'edit-log':
-                    document.getElementById('modal-date-log').textContent = `Edit Log for ${new Date(selectedDate+'T00:00:00').toLocaleDateString()}`;
+                }
+                case 'edit-log': {
+                    const dateForTitle = new Date(selectedDate+'T00:00:00').toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
+                    document.getElementById('modal-date-log').textContent = `Edit Log for ${dateForTitle}`;
                     const dataToEdit = progressData[selectedDate];
                     document.getElementById('bodyweight').value = dataToEdit?.bodyweight || '';
                     document.getElementById('workout-notes').value = dataToEdit?.notes || '';
                     showModal(logModal);
                     break;
+                }
             }
         });
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === "Escape" && !modalBackdrop.classList.contains('hidden')) {
+                hideAllModals();
+            }
+        });
+
     </script>
 </body>
 </html>
