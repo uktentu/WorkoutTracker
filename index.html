@@ -325,7 +325,7 @@
                     'Missed': 'text-red-400'
                  };
                  viewStatusEl.className = `font-semibold ${statusInfo[data.status] || 'text-slate-400'}`;
-                 document.getElementById('view-bodyweight').textContent = data.bodyweight ? `${data.bodyweight} kg` : 'N/A';
+                 document.getElementById('view-bodyweight').textContent = data.bodyweight ? `${data.bodyweight} kg` : 'NA';
                  document.getElementById('view-notes').textContent = data.notes || 'No notes added.';
                  showModal(viewModal);
             } else {
@@ -368,12 +368,9 @@
                     break;
                 }
                 case 'edit-log': {
-                    const dateForTitle = new Date(selectedDate+'T00:00:00').toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
-                    document.getElementById('modal-date-log').textContent = `Edit Log for ${dateForTitle}`;
-                    const dataToEdit = progressData[selectedDate];
-                    document.getElementById('bodyweight').value = dataToEdit?.bodyweight || '';
-                    document.getElementById('workout-notes').value = dataToEdit?.notes || '';
-                    showModal(logModal);
+                    const dateForTitle = new Date(selectedDate+'T00:00:00').toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+                    document.getElementById('modal-date-status').textContent = `Update ${dateForTitle}`;
+                    showModal(statusModal);
                     break;
                 }
             }
