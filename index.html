@@ -206,7 +206,7 @@
         }
 
         // --- Auth Form Event Listeners ---
-        const handleAuthSubmit = async (form, action, errorEl) => {
+        const handleAuthSubmit = async (e, form, action, errorEl) => {
             e.preventDefault();
             errorEl.textContent = '';
             const email = form.querySelector('input[type="email"]').value;
@@ -232,8 +232,8 @@
             }
         };
 
-        loginForm.addEventListener('submit', (e) => handleAuthSubmit(e.target, 'login', loginErrorEl));
-        registerForm.addEventListener('submit', (e) => handleAuthSubmit(e.target, 'register', registerErrorEl));
+        loginForm.addEventListener('submit', (e) => handleAuthSubmit(e, e.target, 'login', loginErrorEl));
+        registerForm.addEventListener('submit', (e) => handleAuthSubmit(e, e.target, 'register', registerErrorEl));
         signoutBtn.addEventListener('click', () => signOut(auth));
         showRegisterBtn.addEventListener('click', (e) => { e.preventDefault(); loginForm.classList.add('hidden'); registerForm.classList.remove('hidden'); });
         showLoginBtn.addEventListener('click', (e) => { e.preventDefault(); registerForm.classList.add('hidden'); loginForm.classList.remove('hidden'); });
